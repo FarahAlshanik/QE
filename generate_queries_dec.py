@@ -55,7 +55,7 @@ def plot_wordembedding(vocfile):
     plt.ylim((-0.5,0.5))
   plt.savefig('viz_dec_lda_words.jpg')
 
-def append_dec_keywords(decfile,ldakeywords,vocfile,dec_thr):
+def append_dec_keywords(decfile,ldakeywords,dec_thr):
   #return the list of list of keywords to expand queries
   #for each topic's top 5 keywords, append the dec word that has the maximum vector spa
   # distance from them. 
@@ -133,7 +133,7 @@ def main(args):
   #keywords from lda topics
   lda_keywords = get_lda_keywords(kwordsfile=args.lda_top_20_keywords_file,lda_thr=int(args.lda))
   #keywords from dec
-  keywords = append_dec_keywords(decfile=args.dec_keyword_file,ldakeywords=lda_keywords,vocfile=args.word_vectors_voc_file,dec_thr=int(args.dec))
+  keywords = append_dec_keywords(decfile=args.dec_keyword_file,ldakeywords=lda_keywords,dec_thr=int(args.dec))
   num_topics = len(keywords)
   #tweet count output file
   tweet_cnt_out_f = open(args.tweet_cnt_output_file,'w')
@@ -179,7 +179,7 @@ if __name__ == "__main__":
   parser.add_argument("--dec", help = "dec threshold",required=True)
   parser.add_argument("--lda_top_20_keywords_file", help = "top 20 keywords for each topic file",required=True) 
   parser.add_argument("--dec_keyword_file", help = "top dec keywords",required=False) 
-  parser.add_argument("--word_vectors_voc_file", help = "file of look up table of word embeddings and dec/lda keywords",required=True) 
+  #parser.add_argument("--word_vectors_voc_file", help = "file of look up table of word embeddings and dec/lda keywords",required=True) 
   parser.add_argument("--query_input_files", help = "directory contains files to start query on",required=True) 
   parser.add_argument("--start_window",type=int, help = "start query from after this window",required=True) 
   parser.add_argument("--n", type=int,help = "number of keywords to use for query",required=True) 
