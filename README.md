@@ -30,7 +30,7 @@ python generate_queries_dec.py --lda 20 --dec 5  --lda_top_20_keywords_file ./ld
 
 8. Generate queries using  LDA words, DEC words, and nearest neighbor words on time interval 16:
 
-python generate_queries_vs.py  --lda 20 --number 3  --lda_top_20_keywords_file ./lda_output/file_16.txt  --query_input_files ./balt_break_all_tweet/  --start_window 16 --query_output_directory ./lda_dec_nearest/ --n 2 --tweet_cnt_output_file  ./lda_dec_nearest/query_lda_dec_nearest_tweet_count.txt
+python generate_queries_vs.py  --lda 20 --dec 5  --number 3 --dec_keyword_file ./dec_vals/ecentrality16.txt --lda_top_20_keywords_file ./lda_output/file_16.txt  --query_input_files ./balt_break_all_tweet/  --start_window 16 --query_output_directory ./lda_dec_nearest/ --n 2 --tweet_cnt_output_file  ./lda_dec_nearest/query_lda_dec_nearest_tweet_count.txt
 
 9. Generate queries using  LDA words, DEC words, and highest frequency words on time interval 16:
 

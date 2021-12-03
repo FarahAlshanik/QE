@@ -4,7 +4,16 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 from pyfasttext import FastText
-import higest_freq_param2
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+import argparse
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+plt.switch_backend('agg')
+from os import listdir
+from os.path import isfile, join
+import math
 
 
 
@@ -29,6 +38,50 @@ def read_wordembedding(vocfile):
     word_vectors[word]=embedding
   voc.close()
   return word_vectors
+
+
+
+
+def append_dec_keywords(decfile,ldakeywords,dec_thr):
+  #return the list of list of keywords to expand queries
+  #for each topic's top 5 keywords, append the dec word that has the maximum vector spa
+  # distance from them.
+  # return [[decword1, topic1word1, ...topic1word5],...]
+  dec_25 = []
+  dec_words = open(decfile,'r')
+  #word_vectors = read_wordembedding(vocfile)
+  #read in 25 dec keywords
+  count = dec_thr
+  ps = PorterStemmer()
+  for line in dec_words:
+    word = line.strip().split()[0]
+    if(word != 'police' and word !='rt'):
+      dec_25.append(word)
+    count -= 1
+    if count == 0:
+      break
+  print(dec_25)
+  ans = []
+  #read in word vectors
+  for topic in ldakeywords:
+    #maxdist = -1.0
+    dec_select_word = ''
+    for dec_word in dec_25:
+        if dec_word not in topic and ps.stem(dec_word) not in topic:
+            dec_select_word=dec_word
+            break
+      #if(dec_word in topic):
+       # continue
+      # find the dec_word that has maximum distance with top 5 lda keywords
+      #dist = sum([distance(word_vectors,word,dec_word) for word in topic])
+      #if dist >= maxdist:
+        #dec_select_word=dec_word
+        #maxdist = dist
+        #print (dec_word + " distance "+ str(dist))
+    ans.append([dec_select_word]+list(topic))
+  print (ans)
+  dec_words.close()
+  return ans
 
 
 
@@ -89,9 +142,11 @@ def main(args):
   #plot_wordembedding(vocfile=args.word_vectors_voc_file)
   #keywords from lda topics
   lda_keywords = get_lda_keywords(kwordsfile=args.lda_top_20_keywords_file,lda_thr=int(args.lda))
+  #keywords from dec
+  keywords = append_dec_keywords(decfile=args.dec_keyword_file,ldakeywords=lda_keywords,dec_thr=int(args.dec))
   #keywords from news space nn
-  news_nn_keywords = get_news_nn_keywords(lda_keywords,number=int(args.number))
-  num_topics = len(lda_keywords)
+  news_nn_keywords = get_news_nn_keywords(keywords,number=int(args.number))
+  num_topics = len(keywords)
   #tweet count output file
   tweet_cnt_out_f = open(args.tweet_cnt_output_file,'w')
   for topic_id in range(num_topics):
@@ -126,7 +181,8 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--lda", help = "lda threshold between 5 and 20",required=True)
   parser.add_argument("--number",help="number of highest freq words", required=True)
-
+  parser.add_argument("--dec_keyword_file", help = "top dec keywords",required=False)
+  parser.add_argument("--dec", help = "dec threshold",required=True)
   parser.add_argument("--lda_top_20_keywords_file", help = "top 20 keywords for each topic file",required=True) 
   parser.add_argument("--query_input_files", help = "directory contains files to start query on",required=True) 
   parser.add_argument("--start_window",type=int, help = "start query from after this window",required=True) 

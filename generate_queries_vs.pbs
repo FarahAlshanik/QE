@@ -10,7 +10,7 @@ mkdir ./query_results_all_intervals_vs/vs_$num
 module add anaconda3/5.1.0-gcc
 source activate py36_new
 
-python ./generate_queries_vs.py  --lda_top_20_keywords_file ./lda_output/file_$num.txt  --number 3   --query_input_files ./balt_break_all_tweet/ --start_window $num  --query_output_directory  ./query_results_all_intervals_vs/vs_$num --n 2 --tweet_cnt_output_file /query_results_all_intervals_vs/vs_tweet_count_all_$num.txt  --lda 20 
+python ./generate_queries_vs.py  --lda_top_20_keywords_file ./lda_output/file_$num.txt  --number 3  --dec 5  --dec_keyword_file ./dec_vals/ecentrality$num.txt  --query_input_files ./balt_break_all_tweet/ --start_window $num  --query_output_directory  ./query_results_all_intervals_vs/vs_$num --n 2 --tweet_cnt_output_file /query_results_all_intervals_vs/vs_tweet_count_all_$num.txt  --lda 20 
 module list > modlist.txt
 
 
