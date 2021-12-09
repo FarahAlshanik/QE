@@ -1,4 +1,4 @@
-# query-construction
+# Code Repository for: Proactive Query Expansion for Streaming Data Using External Sources
 
 1. To break files into 15 minutes time interval
 
@@ -14,7 +14,7 @@ python compute_jaccard.py  --input_folder ./dec_vals/  --output_file  ./emerging
 
 4. To extract files that have emergent events based on the jaccard similarity
 
-python extarct_files.py --input_file  ./emerging_windows.txt  --output_folder ./lda_files/
+python extract_files.py --input_file  ./emerging_windows.txt  --output_folder ./lda_files/
 
 4. To run LDA on the files that have emergent events 
 
